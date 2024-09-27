@@ -1,6 +1,5 @@
-"use strict";
-class Hawaiian {
-    constructor(key, value) {
+var Hawaiian = /** @class */ (function () {
+    function Hawaiian(key, value) {
         this.key = key;
         this.value = value;
         this.color = true;
@@ -8,17 +7,18 @@ class Hawaiian {
         this.right = null;
         this.parent = null;
     }
-}
+    return Hawaiian;
+}());
 /* I decided to use a Red-Black Binary Search Tree for the dictionary because it can maintain balance of the tree and ensure fast search, insertion,
  and deletion. Since the red-black tree stays balanced, it prevents cases that would lower the performance for performing these operations
  and stays at a time complexity of O(log n). A red-black tree is also efficient because its able to "fix" the tree after an insertion by
  recoloring and rotating elements to maintain balance. */
-class Dictionary {
-    constructor() {
+var Dictionary = /** @class */ (function () {
+    function Dictionary() {
         this.root = null;
     }
-    rotateLeft(node) {
-        const rightChild = node.right;
+    Dictionary.prototype.rotateLeft = function (node) {
+        var rightChild = node.right;
         node.right = rightChild.left;
         if (rightChild.left) {
             rightChild.left.parent = node;
@@ -35,10 +35,10 @@ class Dictionary {
         }
         rightChild.left = node;
         node.parent = rightChild;
-    }
+    };
     /* */
-    rotateRight(node) {
-        const leftChild = node.left;
+    Dictionary.prototype.rotateRight = function (node) {
+        var leftChild = node.left;
         node.left = leftChild.right;
         if (leftChild.right) {
             leftChild.right.parent = node;
@@ -55,11 +55,11 @@ class Dictionary {
         }
         leftChild.right = node;
         node.parent = leftChild;
-    }
-    fixInsert(node) {
+    };
+    Dictionary.prototype.fixInsert = function (node) {
         while (node.parent && node.parent.color) {
             if (node.parent === node.parent.parent.left) {
-                const uncle = node.parent.parent.right;
+                var uncle = node.parent.parent.right;
                 if (uncle && uncle.color) {
                     node.parent.color = false;
                     uncle.color = false;
@@ -77,7 +77,7 @@ class Dictionary {
                 }
             }
             else {
-                const uncle = node.parent.parent.left;
+                var uncle = node.parent.parent.left;
                 if (uncle && uncle.color) {
                     node.parent.color = false;
                     uncle.color = false;
@@ -96,9 +96,9 @@ class Dictionary {
             }
         }
         this.root.color = false;
-    }
-    member(saying) {
-        let current = this.root;
+    };
+    Dictionary.prototype.member = function (saying) {
+        var current = this.root;
         while (current) {
             if (saying === current.key) {
                 return true;
@@ -111,27 +111,27 @@ class Dictionary {
             }
         }
         return false;
-    }
-    first() {
-        let current = this.root;
+    };
+    Dictionary.prototype.first = function () {
+        var current = this.root;
         if (!current)
             return null;
         while (current.left) {
             current = current.left;
         }
         return current.key;
-    }
-    last() {
-        let current = this.root;
+    };
+    Dictionary.prototype.last = function () {
+        var current = this.root;
         if (!current)
             return null;
         while (current.right) {
             current = current.right;
         }
         return current.key;
-    }
-    predecessor(saying) {
-        let current = this.findNode(saying);
+    };
+    Dictionary.prototype.predecessor = function (saying) {
+        var current = this.findNode(saying);
         if (!current)
             return current.key;
         if (current.left) {
@@ -141,15 +141,15 @@ class Dictionary {
             }
             return current.key;
         }
-        let parent = current.parent;
+        var parent = current.parent;
         while (parent && current === parent.left) {
             current = parent;
             parent = parent.parent;
         }
         return parent.key;
-    }
-    successor(saying) {
-        let current = this.findNode(saying);
+    };
+    Dictionary.prototype.successor = function (saying) {
+        var current = this.findNode(saying);
         if (!current)
             return current.key;
         if (current.right) {
@@ -159,15 +159,15 @@ class Dictionary {
             }
             return current.key;
         }
-        let parent = current.parent;
+        var parent = current.parent;
         while (parent && current === parent.right) {
             current = parent;
             parent = parent.parent;
         }
         return parent.key;
-    }
-    findNode(saying) {
-        let current = this.root;
+    };
+    Dictionary.prototype.findNode = function (saying) {
+        var current = this.root;
         while (current) {
             if (saying === current.key) {
                 return current;
@@ -180,11 +180,11 @@ class Dictionary {
             }
         }
         return null;
-    }
-    insert(saying, value) {
-        const newNode = new Hawaiian(saying, value);
-        let parent = null;
-        let current = this.root;
+    };
+    Dictionary.prototype.insert = function (saying, value) {
+        var newNode = new Hawaiian(saying, value);
+        var parent = null;
+        var current = this.root;
         while (current) {
             parent = current;
             if (newNode.key < current.key) {
@@ -205,10 +205,10 @@ class Dictionary {
             parent.right = newNode;
         }
         this.fixInsert(newNode);
-    }
-    meHua(word) {
-        const results = [];
-        const search = (node) => {
+    };
+    Dictionary.prototype.meHua = function (word) {
+        var results = [];
+        var search = function (node) {
             if (node) {
                 search(node.left);
                 if (node.key.includes(word)) {
@@ -219,10 +219,10 @@ class Dictionary {
         };
         search(this.root);
         return results;
-    }
-    withWord(word) {
-        const results = [];
-        const search = (node) => {
+    };
+    Dictionary.prototype.withWord = function (word) {
+        var results = [];
+        var search = function (node) {
             if (node) {
                 search(node.left);
                 if (node.value.translation.includes(word)) {
@@ -233,10 +233,11 @@ class Dictionary {
         };
         search(this.root);
         return results;
-    }
-}
+    };
+    return Dictionary;
+}());
 // Dictionary entries
-const tree = new Dictionary();
+var tree = new Dictionary();
 tree.insert("'A'ahu 'ili kao", { translation: "Wearer of goat hide", explanation: { english: "An expression of contempt for a person who is so lazy he uses goat hides instead of mats, which require work to make, for his bedding. Such a person is recognized by his goaty odor.", hawaiian: "He hoike hoowahawaha i ke kanakaʻO ka mea palaualelo, hoʻohana ʻo ia i ka ʻili kaoma kahi o ka moena e pono ai ka hanae hana, no kona wahi moe. ʻO ia ʻano aʻike ʻia ke kanaka e kona ʻala kao." } });
 tree.insert("A 'ai ka manu i luna.", { translation: "The birds feed above.", explanation: { english: "An attractive person is compared to a flower-laden tree that attracts birds.", hawaiian: "Hoʻohālikelike ʻia ke kanaka uʻi me a lāʻau pua e hoʻohihi manu." } });
 tree.insert("E 'ai i ka mea i loa'a.", { translation: "What you have, eat.", explanation: { english: "Be satisfied with what you have.", hawaiian: "E māʻona i kāu mea i loaʻa." } });
