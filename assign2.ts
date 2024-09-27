@@ -1,4 +1,4 @@
-class Hawaiian {
+class Hawaiian { 
     key: string; // Hawaiian saying
     value: {translation: string; explanation: {english: string; hawaiian: string}};
     color: boolean; // True = red, False = black
@@ -15,15 +15,17 @@ class Hawaiian {
         this.parent = null;
     }
 }
-/* I decided to use a Red-Black Binary Search Tree for the dictionary because it can maintain balance of the tree and ensure fast search, insertion,
- and deletion. Since the red-black tree stays balanced, it prevents cases that would lower the performance for performing these operations
- and stays at a time complexity of O(log n). A red-black tree is also efficient because its able to "fix" the tree after an insertion by 
- recoloring and rotating elements to maintain balance. */
+/*  I decided to use a Binary Search Tree (BST) because it is able to support Member, First, Last, Predecessor, Sucessor, and Insert. Because of this, a search tree is 
+    also effective for being used as a dictionary. A BST is able to perform these operations in O(n) time so the time for these processes to take is short, however if the 
+    tree height is large, the set operations would not run any faster than a linked list. Thats why I am specifically using a Red-Black Tree for the dictionary because 
+    it can maintain balance of the tree and ensure fast search, insertion, and deletion. Since the red-black tree stays balanced, it prevents cases that would lower the 
+    performance for performing these operations and stays at a time complexity of O(log n) in the worst cases. A red-black tree is also efficient because its able to "fix" 
+    the tree after an insertion by recoloring and rotating elements to maintain balance. (Cormen et al., 2022, p. 331) */
 
 class Dictionary {
     private root: Hawaiian | null = null;
 
-    private rotateLeft(node: Hawaiian): void {
+    private rotateLeft(node: Hawaiian): void { // (Cormen et al., 2022, p. 336)
         const rightChild = node.right!;
         node.right = rightChild.left;
         if(rightChild.left) {
@@ -41,9 +43,7 @@ class Dictionary {
         node.parent = rightChild;
     }
 
-    /* */
-
-    private rotateRight(node: Hawaiian): void {
+    private rotateRight(node: Hawaiian): void { // (Cormen et al., 2022, p. 336)    
         const leftChild = node.left!;
         node.left = leftChild.right;
         if(leftChild.right) {
@@ -60,8 +60,14 @@ class Dictionary {
         leftChild.right = node;
         node.parent = leftChild;
     }
+    /*  The rotateLeft and rotateRight methods are important operations to maintain balance for a red-black tree. When the Insert or Delete
+        operations are run on a red-black tree, they modify the tree and the result might violate the properties of the tree. For example: 
+        Every node is either red or black; The root is black; Every leaf (NIL) is black; If a node is red, then both its children are black;
+        For each node, all simple paths from the node to descendant leaved contain the same number of black nodes. the rotate methods help 
+        restore this balance by adjusting the structure of the tree. These operations are performed in constant time O(1), while the rest of 
+        the tree operations are able to stay within O(log n). (Cormen et al., 2022, p. 335)*/
 
-    private fixInsert(node: Hawaiian): void {
+    private fixInsert(node: Hawaiian): void { // (Cormen et al., 2022, p. 339)
         while(node.parent && node.parent.color) {
             if(node.parent === node.parent.parent!.left) {
                 const uncle = node.parent.parent!.right;
@@ -99,8 +105,9 @@ class Dictionary {
         }
         this.root!.color = false;
     }
+    /* */
 
-    member(saying: string): boolean {
+    member(saying: string): boolean { 
         let current = this.root;
         while(current) {
             if(saying === current.key) {
@@ -114,7 +121,7 @@ class Dictionary {
         return false;
     }
 
-    first(): string | null {
+    first(): string | null { // (Cormen et al., 2022, p. 318)
         let current = this.root;
         if (!current) return null; 
         while (current.left) {
@@ -123,7 +130,7 @@ class Dictionary {
         return current.key;
     }
 
-    last(): string | null {
+    last(): string | null { // (Cormen et al., 2022, p. 318)
         let current = this.root;
         if (!current) return null; 
         while (current.right) {
@@ -132,7 +139,7 @@ class Dictionary {
         return current.key;
     }
 
-    predecessor(saying: string): string {
+    predecessor(saying: string): string { // (Cormen et al., 2022, p. 319)
         let current = this.findNode(saying);
         if(!current) return current!.key;
         if(current.left) {
@@ -150,7 +157,7 @@ class Dictionary {
         return parent!.key;
     }
 
-    successor(saying: string): string {
+    successor(saying: string): string { // (Cormen et al., 2022, p. 319)
         let current = this.findNode(saying);
         if(!current) return current!.key;
         if(current.right) {
@@ -168,7 +175,7 @@ class Dictionary {
         return parent!.key;
     }
 
-    private findNode(saying: string): Hawaiian | null {
+    private findNode(saying: string): Hawaiian | void { // (Cormen et al., 2022, p. 316)
         let current = this.root;
         while (current) {
             if (saying === current.key) {
@@ -179,10 +186,10 @@ class Dictionary {
                 current = current.right;
             }
         }
-        return null;
+        return console.log("Saying not found.");
     }
     
-    insert(saying: string, value: {translation: string; explanation: {english: string; hawaiian: string}}): void {
+    insert(saying: string, value: {translation: string; explanation: {english: string; hawaiian: string}}): void { // (Cormen et al., 2022, p. 338) 
         const newNode = new Hawaiian(saying, value);
         let parent: Hawaiian | null = null;
         let current: Hawaiian | null = this.root;
@@ -283,5 +290,6 @@ console.log(tree.withWord("is")); // expected: [{ saying: "'Ohi aku ka pō a koe
 /* Reference List
 - Mary Kawena Pukui (editor, translator). ʻŌlelo Noʻeau: Hawaiian Proverbs & Poetical Sayings. Bishop Museum Press; 1983. Accessed 
   September 22, 2024. https://search-ebscohost-com.eres.library.manoa.hawaii.edu/login.aspx?direct=true&db=nlebk&AN=2575808&site=ehost-live 
-- 1. Cormen TH, Leiserson CE, Rivest RL, Stein C. Introduction to Algorithms Thomas H. Cormen Aut; Charles E. Leiserson Aut; Ronald L. Rivest Aut; 
+
+- Cormen TH, Leiserson CE, Rivest RL, Stein C. Introduction to Algorithms Thomas H. Cormen Aut; Charles E. Leiserson Aut; Ronald L. Rivest Aut; 
   Clifford Stein Aut. The MIT Press; 2022. */
