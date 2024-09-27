@@ -149,7 +149,7 @@ class Dictionary {
         key in the tree. The methods moves iteratively to the first or last node and since their able to avoid moving through unnecessary 
         areas of the tree, it can efficiently narrow down its search area. Because of the use of a red-black tree and the tree stays 
         balanced because of it, the time complexity is able to avoid a worst case and stay at O(log n) making the method very efficient.
-        This method works effectively by checking for an empty tree and exiting early so there is no unnecessary operations. */
+        This method works effectively by checking for an empty tree and exiting early so there is no unnecessary operations. (Cormen et al., 2022, p. 318) */
 
     predecessor(saying: string): string { // (Cormen et al., 2022, p. 319)
         let current = this.findNode(saying);
@@ -190,7 +190,7 @@ class Dictionary {
         handle the two cases of either the node having a "right" child or not by moving up or down the tree. These directions limit the amount 
         of nodes needed to visit. This makes it so the smallest key larger than the "current" is found without having to travel unnecessary 
         parts of the tree. The predecessor method works symmeetricly to the predecessor method. Since the red-black tree keeps the tree 
-        balanced. these methods are able to efficiently traverse large trees in O(log n). */
+        balanced. these methods are able to efficiently traverse large trees in O(log n). (Cormen et al., 2022, p. 319) */
 
     private findNode(saying: string): Hawaiian | void { // (Cormen et al., 2022, p. 316)
         let current = this.root;
@@ -205,7 +205,7 @@ class Dictionary {
         }
         return console.log("Saying not found.");
     }
-    /*  The findNode method works similarily to the member method. It is used to quickly find the node in the BST that matches the given key.*/
+    /*  The findNode method works similarily to the member method. It is used to quickly find the node in the BST that matches the given key. */
     
     insert(saying: string, value: {translation: string; explanation: {english: string; hawaiian: string}}): void { // (Cormen et al., 2022, p. 338) 
         const newNode = new Hawaiian(saying, value);
@@ -229,7 +229,12 @@ class Dictionary {
         }
         this.fixInsert(newNode);
     }
-    /* The */
+    /*  The insert node is a standard operation for placing a node into a BST. It works by comparing the key and the current node to either
+        move left or right to narrow down the correct insertion location. This approach allows this method to work efficiently by discarding
+        half of the tree during each comparison of traversal. During the insertion of the new node the method is able to effectively self-balance
+        the tree by calling the fixInsert method and preventing the tree from becoming unbalanced. Since the red-black tree stays balanced,
+        the time complexity stays at O(log n) making insertion of nodes highly efficient. (Cormen et al., 2022, p.321) */
+
     meHua(word: string): Array<{saying: string}> {
         const results: Array<{saying: string}> = [];
         const search = (node: Hawaiian | null) => {
@@ -260,6 +265,10 @@ class Dictionary {
         return results;
     }
 }
+/*  The meHua and withWord methods both work similarily to each other. They are supposed to search through the BST and return an array of all
+    sayings that contain the Hawaiian or English word. The methods visits each node with a time complexity of O(n) once with efficient string 
+    matching. Since the algorithms efficiently explore each node in an ordered fashion, it can effectively ensure that no relevant nodes can 
+    be missed. */
 
 // Dictionary entries
 const tree = new Dictionary();
