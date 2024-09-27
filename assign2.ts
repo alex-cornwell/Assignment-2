@@ -105,7 +105,10 @@ class Dictionary {
         }
         this.root!.color = false;
     }
-    /* */
+    /*  The fixInsert or Insert Fixup method is another critical part to maintain balance and property rules of a red-black tree after the
+        insertion of a new node. It is effective because it is able to fix these property violations by either "recoloring" parent or uncle 
+        nodes or by performing a left or right rotation on the tree to rebalance the nodes. By using while loops, the algorithm is able to 
+        efficiently continue fixing the tree until the property rules are restored. (Cormen et al., 2022, p. 338)*/
 
     member(saying: string): boolean { 
         let current = this.root;
